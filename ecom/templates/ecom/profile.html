@@ -1,0 +1,45 @@
+{% extends 'ecom/header.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Profile</h2>
+
+    <div class="row">
+        <!-- Personal Information Display -->
+        <div class="col-md-6 mb-4">
+            <h4>Personal Information</h4>
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>First Name:</strong> {{ user.firstname }}</p>
+                    <p><strong>Last Name:</strong> {{ user.lastname }}</p>
+                    <p><strong>Address:</strong> {{ user.address }}</p>
+                    <p><strong>Phone Number:</strong> {{ user.phone_no }}</p>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Previous Orders -->
+        <div class="col-md-6 mb-4">
+            <h4>Previous Orders</h4>
+            {% if orders %}
+                <ul class="list-group">
+                    {% for order in orders %}
+                        <li class="list-group-item">
+                            <strong>Order ID:</strong> {{ order.id }} <br>
+                            <strong>Date:</strong> {{ order.date }} <br>
+                            <strong>Total:</strong> ${{ order.total }} <br>
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-info mt-2">View Details</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No previous orders found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

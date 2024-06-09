@@ -1,0 +1,69 @@
+{% extends 'ecom/header.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Welcome to Grocery Store</h1>
+</div>
+
+<!-- Featured Products Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Featured Products</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card product-card">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">₹{{ product.price }}</p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!-- About Us Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">About Us</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'ecom/images/salt.jpg' %}" class="img-fluid" alt="About Us">
+        </div>
+        <div class="col-md-6">
+            <h3>Who We Are</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque fermentum, lorem vel tempus posuere, turpis odio vestibulum magna, eget ultricies risus arcu vel turpis.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque fermentum, lorem vel tempus posuere, turpis odio vestibulum magna, eget ultricies risus arcu vel turpis.</p>
+            <a href="{% url 'aboutUs' %}" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Contact Us</h2>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Name">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMessage">Message</label>
+            <textarea class="form-control" id="inputMessage" rows="4" placeholder="Your message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</div>
+
+
+{% endblock %}

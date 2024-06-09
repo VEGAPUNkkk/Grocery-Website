@@ -1,0 +1,30 @@
+{% extends 'ecom/header.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Our Products</h2>
+    {% for category in categories %}
+    <h3 class="text-left mb-4">{{ category | title }}s</h3>
+    <div class="row">
+            {% for product in products %}
+                {% if category == product.category %}
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text font-weight-bold">${{ product.price }}</p>
+                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+    </div>
+        {% endfor %}
+    
+</div>
+
+{% endblock %}

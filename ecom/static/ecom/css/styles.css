@@ -1,0 +1,32 @@
+.hero {
+    background: url("../images/veggies1.jpg") center center/cover no-repeat;
+    height: 80vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.zero {
+    background: url("../images/veggies.jpg") center center/cover no-repeat;
+    height: 80vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.product-card img {
+    height: 300px;
+    object-fit: cover;
+}
