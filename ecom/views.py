@@ -62,7 +62,6 @@ def aboutUs(request):
 
 def profile(request):
     user = request.user
-    print(user.username)
     return render(request, 'ecom/profile.html', {'user' : user})
 
 def edit_profile(request):
@@ -74,3 +73,41 @@ def edit_profile(request):
     else:
         form = UserDetailForm(instance=request.user)
     return render(request, 'ecom/edit_profile.html', {'form': form})
+
+def add_to_cart(request, id, op=None):
+    quantity = int(request.GET.get('quantity', 1))
+    print('\n\n', quantity,op, '\n\n')
+    user = request.user
+    product = get_object_or_404(Product, pk=id)
+    cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
+    if created:
+        cart_item.quantity = quantity
+    else:
+        if op=='sub':
+            cart_item.quantity -= quantity
+        else:
+            cart_item.quantity += quantity
+    cart_item.save()
+    return redirect(to='view_cart')
+
+def view_cart(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    products = []
+    total_price = 0
+
+    for item in cart_items:
+        product = item.product
+        total_price += product.price * item.quantity
+        products.append({
+            'product': product,
+            'quantity': item.quantity,
+            'total_price': product.price * item.quantity
+        })
+
+    return render(request, 'ecom/cart.html', {'products': products, 'total_price': total_price})
+
+
+def remove_from_cart(request, id):
+    cart_item = CartItem.objects.get(user=request.user, product_id=id)
+    cart_item.delete()
+    return redirect(to='view_cart')

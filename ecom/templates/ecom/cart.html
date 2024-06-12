@@ -3,33 +3,31 @@
 
 {% block content %}
 <div class="container my-5">
-    <h2 class="text-center mb-4">Our Products</h2>
-    {% for category in categories %}
-    <h3 class="text-left mb-4">{{ category | title }}s</h3>
+    <h2 class="text-center mb-4">Your Cart</h2>
     <div class="row">
-        {% for product in products %}
-            {% if category == product.category %}
-            <div class="col-md-4 mb-4">
-                <div class="card product-card">
-                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description }}</p>
-                        <p class="card-text font-weight-bold">${{ product.price }}</p>
-                        <div class="quantity-input">
-                            <button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="{{ product.pk }}">-</button>
-                            <input type="number" class="form-control quantity" value="1" min="1" data-product-id="{{ product.pk }}">
-                            <button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="{{ product.pk }}">+</button>
-                        </div>
-                        <a href="{% url 'add_to_cart' id=product.pk op='add'%}?quantity=1" class="btn btn-primary add-to-cart-btn" data-product-id="{{ product.pk }}">Add to Cart</a>
-                        <a href="#" class="btn btn-primary">Buy Now</a>
+        {% for item in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card product-card">
+                <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text">Product Price: ₹{{ item.product.price }}</p>
+                    <p class="card-text">Quantity: {{ item.quantity }}</p>
+                    <div class="quantity-input">
+                        <a href="{% url 'add_to_cart' id=item.product.pk op='sub'%}?quantity=1"><button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="{{ product.pk }}">-</button></a>
+                        <input type="number" class="form-control quantity" value="{{ item.quantity }}" min="1" data-product-id="{{ product.pk }}">
+                        <a href="{% url 'add_to_cart' id=item.product.pk op='add'%}?quantity=1"><button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="{{ product.pk }}">+</button></a>
                     </div>
+                    <p class="card-text">Total Price: ₹{{ item.total_price }}</p>
+                    <a href="{% url 'remove_from_cart' item.product.pk %}" class="btn btn-primary">Remove from Cart</a>
                 </div>
             </div>
-            {% endif %}
+        </div>
         {% endfor %}
     </div>
-    {% endfor %}
+    <div>
+        <h5 class="card-title">Total Price: ₹{{ total_price }}</h5>
+    </div>
 </div>
 
 <script>
@@ -38,7 +36,7 @@
             const quantityInput = document.querySelector(`input.quantity[data-product-id="${productId}"]`);
             const addToCartBtn = document.querySelector(`a.add-to-cart-btn[data-product-id="${productId}"]`);
             const quantity = quantityInput.value;
-            const baseUrl = "{% url 'add_to_cart' 0 0 %}".replace('0', productId);
+            const baseUrl = "{% url 'add_to_cart' 0 0%}".replace('0', productId);
             addToCartBtn.href = `${baseUrl}?quantity=${quantity}`;
         };
 
@@ -69,5 +67,6 @@
         });
     });
 </script>
+
 
 {% endblock %}
