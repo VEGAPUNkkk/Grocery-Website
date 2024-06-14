@@ -12,14 +12,14 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ item.product.name }}</h5>
                     <p class="card-text">Product Price: ₹{{ item.product.price }}</p>
-                    <p class="card-text">Quantity: {{ item.quantity }}</p>
                     <div class="quantity-input">
-                        <a href="{% url 'add_to_cart' id=item.product.pk op='sub'%}?quantity=1"><button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="{{ product.pk }}">-</button></a>
-                        <input type="number" class="form-control quantity" value="{{ item.quantity }}" min="1" data-product-id="{{ product.pk }}">
-                        <a href="{% url 'add_to_cart' id=item.product.pk op='add'%}?quantity=1"><button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="{{ product.pk }}">+</button></a>
+                        <a href="{% url 'add_to_cart' id=item.product.pk op='sub'%}?quantity=1"><button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="{{ item.product.pk }}">-</button></a>
+                        <input type="number" class="form-control quantity" value="{{ item.quantity }}" min="1" data-product-id="{{ item.product.pk }}">
+                        <a href="{% url 'add_to_cart' id=item.product.pk op='add'%}?quantity=1"><button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="{{ item.product.pk }}">+</button></a>
                     </div>
                     <p class="card-text">Total Price: ₹{{ item.total_price }}</p>
-                    <a href="{% url 'remove_from_cart' item.product.pk %}" class="btn btn-primary">Remove from Cart</a>
+                    <a href="{% url 'remove_from_cart' id=item.product.pk %}" class="btn btn-primary">Remove from Cart</a>
+                    <a href="{% url 'add_to_orders' id=item.product.pk %}?quantity=1" class="btn btn-primary add-to-order-btn" data-product-id="{{ item.product.pk }}">Buy Now</a>                   
                 </div>
             </div>
         </div>
@@ -31,42 +31,42 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const updateAddToCartUrl = (productId) => {
+    document.addEventListener('DOMContentLoaded', function () {  
+        const updateAddToOrderUrl = (productId) => {
             const quantityInput = document.querySelector(`input.quantity[data-product-id="${productId}"]`);
-            const addToCartBtn = document.querySelector(`a.add-to-cart-btn[data-product-id="${productId}"]`);
+            const addToOrderBtn = document.querySelector(`a.add-to-order-btn[data-product-id="${productId}"]`);
             const quantity = quantityInput.value;
-            const baseUrl = "{% url 'add_to_cart' 0 0%}".replace('0', productId);
-            addToCartBtn.href = `${baseUrl}?quantity=${quantity}`;
+            const baseUrl = "{% url 'add_to_orders' 0 %}".replace('0', productId);
+            addToOrderBtn.href = `${baseUrl}?quantity=${quantity}`;
         };
-
+    
         document.querySelectorAll('.btn-minus').forEach(button => {
             button.addEventListener('click', () => {
                 const productId = button.getAttribute('data-product-id');
                 const quantityInput = document.querySelector(`input.quantity[data-product-id="${productId}"]`);
                 if (quantityInput.value > 1) {
                     quantityInput.value = parseInt(quantityInput.value) - 1;
-                    updateAddToCartUrl(productId);
+                    updateAddToOrderUrl(productId);
                 }
             });
         });
-
+    
         document.querySelectorAll('.btn-plus').forEach(button => {
             button.addEventListener('click', () => {
                 const productId = button.getAttribute('data-product-id');
                 const quantityInput = document.querySelector(`input.quantity[data-product-id="${productId}"]`);
                 quantityInput.value = parseInt(quantityInput.value) + 1;
-                updateAddToCartUrl(productId);
+                updateAddToOrderUrl(productId);
             });
         });
-
+    
         // Ensure URLs are updated on initial page load
         document.querySelectorAll('input.quantity').forEach(input => {
             const productId = input.getAttribute('data-product-id');
-            updateAddToCartUrl(productId);
+            updateAddToOrderUrl(productId);
         });
     });
+    
 </script>
-
 
 {% endblock %}

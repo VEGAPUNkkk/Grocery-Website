@@ -18,14 +18,13 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">₹{{ product.price }}</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                    <a href="{% url 'add_to_cart' id=product.pk op='add'%}" class="btn btn-primary">Add to Cart</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
-
 
 <!-- About Us Section -->
 <div class="container my-5">
@@ -65,5 +64,6 @@
     </form>
 </div>
 
+<script src="{% static 'ecom/js/scripts.js' %}"></script>
 
 {% endblock %}

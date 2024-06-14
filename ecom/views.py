@@ -76,7 +76,6 @@ def edit_profile(request):
 
 def add_to_cart(request, id, op=None):
     quantity = int(request.GET.get('quantity', 1))
-    print('\n\n', quantity,op, '\n\n')
     user = request.user
     product = get_object_or_404(Product, pk=id)
     cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
@@ -111,3 +110,34 @@ def remove_from_cart(request, id):
     cart_item = CartItem.objects.get(user=request.user, product_id=id)
     cart_item.delete()
     return redirect(to='view_cart')
+
+def add_to_orders(request, id):
+    quantity = int(request.GET.get('quantity', 1))
+    product = get_object_or_404(Product, pk=id)
+    user = request.user
+    Orders.objects.create(
+        product = product,
+        user=user,
+        quantity = quantity,
+        total_price = quantity * product.price
+    )
+    return redirect(to='view_orders')
+
+def view_orders(request):
+    order_items = Orders.objects.filter(user=request.user)
+    products = []
+    total_price = 0
+    for items in order_items:
+        product = items.product
+        total_price += product.price * items.quantity
+        products.append({
+            'product' : product,
+            'quantity' : items.quantity,
+            'total_price' : product.price * items.quantity
+        })  
+    return render(request, 'ecom/orders.html', {'products' : products, 'total_price' : total_price})
+
+def cancel_order(request, id):
+    order_item = get_object_or_404(Orders, user=request.user, product_id=id)
+    order_item.delete()
+    return redirect(to='view_orders')
