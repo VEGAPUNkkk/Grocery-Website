@@ -13,6 +13,9 @@
       {% for message in messages %}
         <p>{{ message }}</p>
       {% endfor %}
+      <br>
+      <p>Don’t have an account? <a href="{% url 'signup' %}"> Sign up</a></p>
+      
 </div>
 
 {% endblock %}

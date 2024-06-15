@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container my-5">
     <h2 class="text-center mb-4">Our Products</h2>
+    {% if products and categories %}
     {% for category in categories %}
     <h3 class="text-left mb-4">{{ category | title }}s</h3>
     <div class="row">
@@ -30,6 +31,11 @@
         {% endfor %}
     </div>
     {% endfor %}
+    {% else %}
+    <div>
+        <h4>Sorry, We don't have the requested product or products of a category</h4>
+    </div>
+    {% endif %}
 </div>
 
 <script> 

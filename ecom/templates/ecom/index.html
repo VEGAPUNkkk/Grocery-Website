@@ -31,7 +31,7 @@
     <h2 class="text-center mb-4">About Us</h2>
     <div class="row">
         <div class="col-md-6">
-            <img src="{% static 'ecom/images/about_us.png' %}" class="img-fluid" alt="About Us">
+            <img src="{% static 'ecom/images/about_us.jpg' %}" class="img-fluid" alt="About Us">
         </div>
         <div class="col-md-6">
             <h3>Who We Are</h3>
@@ -45,25 +45,33 @@
 <!-- Contact Section -->
 <div class="container my-5">
     <h2 class="text-center mb-4">Contact Us</h2>
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputName">Name</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Name">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail">Email</label>
-                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-            </div>
+    <form method="POST" action="{% url 'contact_form' %}">
+        {% csrf_token %}
+        <div class="form-group col-md-6">
+            <label for="inputName">Subject</label>
+            <input type="text" class="form-control" id="inputName" placeholder="Subject" name="subject">
         </div>
         <div class="form-group">
             <label for="inputMessage">Message</label>
-            <textarea class="form-control" id="inputMessage" rows="4" placeholder="Your message"></textarea>
+            <textarea class="form-control" id="inputMessage" rows="4" placeholder="Your message" name="message"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Send</button>
     </form>
+    {% if messages %}
+    <div class="messages" id="message_container">
+        {% for message in messages%}
+        <h5 style="color: green;">{{ message }}</h5>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 
 <script src="{% static 'ecom/js/scripts.js' %}"></script>
+<script>
+    var message_ele = document.getElementById("message_container");
 
+    setTimeout(function(){ 
+    message_ele.style.display = "none"; 
+    }, 3000);
+</script>
 {% endblock %}

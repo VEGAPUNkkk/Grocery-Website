@@ -18,4 +18,6 @@ urlpatterns = [
     path('add_to_orders/<int:id>/', views.add_to_orders, name='add_to_orders'),
     path('view_orders/', views.view_orders, name='view_orders'),
     path('cancel_order/<int:id>/', views.cancel_order, name='cancel_order'),
+    path('contact_form', views.contact_form, name='contact_form'),
+    path('search', views.search, name='search')
 ]
