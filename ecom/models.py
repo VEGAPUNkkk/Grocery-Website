@@ -39,8 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     firstname = models.CharField(max_length=50, blank=True, null=True)
     lastname = models.CharField(max_length=50, blank=True, null=True)
-    address = models.CharField(max_length=200, blank=True, null=True)
-    phone_no = models.CharField(max_length=15, unique=True, blank=True, null=True)  # Allow blank and null initially
+    phone_no = models.CharField(max_length=10, unique=True, blank=True, null=True)  # Allow blank and null initially
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -54,7 +53,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
-    
+
+class UserAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    residence = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    landmark = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.street}, {self.city}, {self.state}, {self.postal_code}, {self.country}"
+
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)

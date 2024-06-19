@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, UserAddress
 from django import forms
 
 
@@ -22,5 +22,11 @@ class LoginForm(forms.Form):
 class UserDetailForm(forms.ModelForm):
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'firstname', 'lastname', 'address', 'phone_no']
+        model = User 
+        fields = ['username', 'email', 'firstname', 'lastname',  'phone_no']
+
+class AddressForm(forms.ModelForm):
+
+    class Meta:
+        model = UserAddress
+        fields = ['residence', 'landmark', 'street', 'city', 'state', 'country', 'postal_code']

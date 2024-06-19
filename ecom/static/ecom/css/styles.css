@@ -30,3 +30,9 @@
     height: 300px;
     object-fit: cover;
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }

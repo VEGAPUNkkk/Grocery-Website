@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container mt-5">
     <h2 class="text-center mb-4">Edit Profile</h2>
     
@@ -9,11 +10,20 @@
         <div class="col-md-6">
             <form method="POST" action="">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ profile_form.as_p }}
+                {{ address_form.as_p }}
+                {{ profile_form.errors }}
                 <button type="submit" class="btn btn-primary">Save Changes</button>
                 <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
             </form>
+            <br>
+            <div>
+                {% for message in messages %}
+                <p class="messages">{{ message }}</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

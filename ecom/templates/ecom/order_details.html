@@ -1,0 +1,46 @@
+{% extends 'ecom/header.html' %}
+{% load static %}
+
+{% block content %}
+    {% if user.is_superuser %}
+<table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">username</th>
+        <th scope="col">address</th>
+        <th scope="col">phone_no</th>
+        <th scope="col">product</th>
+        <th scope="col">quantity</th>
+        <th scope="col">total_price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <th scope="row"></th>
+        <td>{{ product.user.username }}</td>
+        <td>{{ product.address }}</td>
+        <td>{{ product.user.phone_no }}</td>
+        <td>{{ product.product.name }}</td>
+        <td>{{ product.order.quantity }}</td>
+        <td>{{ product.total_price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br><hr>
+  <div class="container">
+    <a  href="{{ file_url }}" download> Download CSV </a>
+  </div>
+  {% endif %}
+  {% if messages %}
+  <div class="messages text-center" id="message_container">
+      {% for message in messages%}
+      <h5 style="color: green;">{{ message }}</h5>
+      {% endfor %}
+  </div>
+  {% endif %}
+  <br>
+  <hr>
+{% endblock %}
