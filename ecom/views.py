@@ -3,9 +3,9 @@ from .models import *
 from .forms import CreateUserForm, LoginForm, UserDetailForm, AddressForm
 from django.conf import settings
 from django.contrib import messages
-from .helper import authenticate
+from .helper import authenticate, send_message
 from django.contrib.auth import login, logout, get_user_model
-from .decorators import login_required, admin_only
+from .decorators import login_required, admin_only, complete_profile
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 import csv
@@ -158,6 +158,7 @@ def remove_from_cart(request, id):
     return redirect(to='view_cart')
 
 @login_required
+@complete_profile
 def add_to_orders(request, id):
     quantity = int(request.GET.get('quantity', 1))
     product = get_object_or_404(Product, pk=id)
@@ -168,18 +169,27 @@ def add_to_orders(request, id):
         quantity = quantity,
         total_price = quantity * product.price
     )
+
+    send_message(user=request.user, subject='place', product=product, quantity=quantity)
+
+    return redirect(to='view_orders')
+
+@login_required
+@complete_profile
+def buy_all(request):
     user = request.user
-    name = user.username
-    email = user.email
-    subject = "Product Order"
-    message = f"User {user.username} has ordered {product.name} \n Quantity: {quantity} \n Total Price: {quantity * product.price}"
-    full_message = f"Message from {name}, {email}:\n\n{subject}\n{message}"
-    send_mail(
-        subject,
-        full_message,
-        email,
-        ['mashburnedead7038@gmail.com'],
-    )
+    cart_items = CartItem.objects.filter(user=user)
+    for item in cart_items:
+        product = Product.objects.get(pk=item.product.id)
+        quantity = item.quantity
+        total_price = quantity * product.price
+        Orders.objects.create(
+            product = product,
+            user = user,
+            quantity = quantity,
+            total_price = total_price
+        )
+        send_message(user=request.user, subject='place', product=product, quantity=quantity)
     return redirect(to='view_orders')
 
 @login_required
@@ -202,22 +212,11 @@ def cancel_order(request, id):
     user = request.user
     order_item = get_object_or_404(Orders, user=user, product_id=id)
     product = get_object_or_404(Product, pk=id)
-    
-    user = request.user
-    name = user.username
-    email = user.email
-    subject = "Product Cancel"
-    message = f"User {user.username} has canceled {product.name} \n Quantity: {order_item.quantity} \n Total Price: {order_item.quantity * product.price}"
-    full_message = f"Message from {name}, {email}:\n\n{subject}\n{message}"
-    send_mail(
-        subject,
-        full_message,
-        email,
-        ['mashburnedead7038@gmail.com'],
-    )
+
+    send_message(user=request.user, subject='cancel', product=product, quantity=order_item.quantity)
 
     order_item.delete()
-    
+
     return redirect(to='view_orders')
 
 @login_required
@@ -233,11 +232,11 @@ def contact_form(request):
             subject,
             full_message,
             email,
-            ['monkeydluffy7038@gmail.com', 'mashburnedead7038@gmail.com'],
+            ['monkeydluffy7038@gmail.com'],
         )
         messages.success(request, 'Message sent successfully')
         return redirect(to='homepage')
-    
+
 def search(request):
     if request.method == "POST":
         search_item = request.POST.get('search')

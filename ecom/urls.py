@@ -20,5 +20,6 @@ urlpatterns = [
     path('cancel_order/<int:id>/', views.cancel_order, name='cancel_order'),
     path('contact_form', views.contact_form, name='contact_form'),
     path('search', views.search, name='search'),
-    path('order_details/', views.order_details, name='order_details')
+    path('order_details/', views.order_details, name='order_details'),
+    path('buy_all/', views.buy_all, name='buy_all'),
 ]
