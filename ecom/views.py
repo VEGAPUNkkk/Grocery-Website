@@ -217,6 +217,7 @@ def cancel_order(request, id):
     )
 
     order_item.delete()
+    
     return redirect(to='view_orders')
 
 @login_required
