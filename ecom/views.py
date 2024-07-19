@@ -201,17 +201,19 @@ def view_orders(request):
         product = items.product
         total_price += product.price * items.quantity
         products.append({
+            'pk' : items.pk,
             'product' : product,
             'quantity' : items.quantity,
             'total_price' : product.price * items.quantity
-        })  
+        }) 
     return render(request, 'ecom/orders.html', {'products' : products, 'total_price' : total_price})
 
 @login_required
 def cancel_order(request, id):
     user = request.user
-    order_item = get_object_or_404(Orders, user=user, product_id=id)
-    product = get_object_or_404(Product, pk=id)
+    print(id)
+    order_item = get_object_or_404(Orders, user=user, pk=id)
+    product = get_object_or_404(Product, pk=order_item.product_id)
 
     send_message(user=request.user, subject='cancel', product=product, quantity=order_item.quantity)
 

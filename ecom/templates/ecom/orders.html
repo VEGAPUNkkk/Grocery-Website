@@ -16,7 +16,7 @@
                         <p class="card-text">Product Price: ₹{{ item.product.price }}</p>
                         <p class="card-text">Quantity: {{ item.quantity }}</p>
                         <p class="card-text">Total Price: ₹{{ item.total_price }}</p>
-                        <a href="{% url 'cancel_order' id=item.product.pk %}" class="btn btn-primary">Cancel Order</a>
+                        <a href="{% url 'cancel_order' id=item.pk %}" class="btn btn-primary">Cancel Order</a>
                     </div>
                 </div>
             </div>

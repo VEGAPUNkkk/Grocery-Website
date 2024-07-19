@@ -23,7 +23,7 @@ def admin_only(func):
 def complete_profile(func):
     def wrapper_func(request, *args, **kwargs):
         user = request.user
-        if user.phone_no and user.first_name and user.last_name:
+        if user.phone_no and user.firstname and user.lastname:
             address = UserAddress.objects.filter(user=user)
             if address:
                 return func(request, *args, **kwargs)
